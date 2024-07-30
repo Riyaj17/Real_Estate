@@ -26,3 +26,15 @@ app.listen(3000, () => {
 app.use("/api/user", userRouter); // userRouter has a default export address , and here use the name userRouter
 
 app.use('/api/auth', authRouter); //this is for the authentication purpose
+
+
+// creating middleware
+app.use((err , req, res, next) => {
+    const statusCode = err.statusCode || 500; //500 is internal server error
+    const message = err.message || 'Internal Server Error';
+    return res.status(statusCode).json({
+        success: false,
+        statusCode, //after es6 if key and variable is same name then wirte one 
+        message,
+    });
+});
