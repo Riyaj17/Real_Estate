@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 /* this code going to apply the base classes of tailwind css */
+
+body{
+    background-color: rgb(241,245,241);
+}
