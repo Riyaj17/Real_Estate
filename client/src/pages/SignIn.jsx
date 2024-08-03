@@ -1,14 +1,23 @@
 import { useState } from 'react';
 import {Link , useNavigate} from 'react-router-dom'; //the usenavigate navigate one page to another page
+import { useDispatch, useSelector } from 'react-redux';
+//import all the functions that we created
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});  //this will keep track from all the changes
  
   //using two more use state one for error and another for loading 
-  const [error, setError] = useState(null); 
-  const [loading , setLoading] = useState(false);
+  // const [error, setError] = useState(null); 
+  // const [loading , setLoading] = useState(false);
+
+  //instead of error and loading 
+  const { loading, error } = useSelector((state) => state.user); //using useselector hooks we import these two,,, this coming from our global state and the state name is user
   //initialize useNavigate
   const navigate = useNavigate();
+
+  //dispatch initialization
+  const dispatch = useDispatch();
  
   const handleChange = (e) => {
     setFormData(
@@ -23,7 +32,9 @@ export default function SignIn() {
 
     //using try and catch to get the possible error in the fornt-end
     try{
-      setLoading(true); //before send the request the loading to true
+      //setLoading(true); //before send the request the loading to true
+      //instead of setloading true dispatch signInStart
+      dispatch(signInStart());
 
     // //this will req the localhost 3000
     const res = await fetch('/api/auth/signin',
@@ -34,26 +45,34 @@ export default function SignIn() {
         },
         //send from the body of the browser and send this information
         body: JSON.stringify(formData),  //the form data change into the stringify , otherwise it not to secure to do that
-      }
-    );
+      });
     const data = await res.json(); //get data in the json format
     console.log(data);
     
     //after request is finish if error is found then set the error through the message
     if(data.success === false){
-      setLoading(false);
-      setError(data.message);
+      // setLoading(false);
+      // setError(data.message);
+//instead of setloading and seterror using dispatch
+      //dispatch data message
+      dispatch(signInFailure(data.message));
       return;
     }
     //otherwise set loading to false here because the loading is completed
-    setLoading(false);
-    setError(null); //if everything is fine
+    // setLoading(false);
+    // setError(null); //if everything is fine
+
+    // instead of setting load and error
+    dispatch(signInSuccess(data));
     //navigate to home page
     navigate('/');
     }
     catch(error){
-      setLoading(false);
-      setError(error.message);
+      // setLoading(false);
+      // setError(error.message);
+
+      //instead of these two
+      dispatch(signInFailure(error.message));
     }
 
   };
@@ -85,5 +104,6 @@ export default function SignIn() {
       {/* if there is a error we show the paragraph */}
       {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
-  )
+  );
 }
+

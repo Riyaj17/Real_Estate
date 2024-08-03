@@ -88,5 +88,5 @@ export default function SignUp() {
       {/* if there is a error we show the paragraph */}
       {error && <p className='text-red-500 mt-5'>{error}</p>}
     </div>
-  )
+  );
 }
