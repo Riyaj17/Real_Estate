@@ -3,6 +3,7 @@ import {Link , useNavigate} from 'react-router-dom'; //the usenavigate navigate 
 import { useDispatch, useSelector } from 'react-redux';
 //import all the functions that we created
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});  //this will keep track from all the changes
@@ -94,6 +95,9 @@ export default function SignIn() {
         {loading ? 'Loading...' : 'Sign In'}
         {/* if loading is true the say loading... otherwise sing up */}
         </button>
+
+        {/* adding the OAuth component */}
+        <OAuth />
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Dont have an account?</p>

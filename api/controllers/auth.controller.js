@@ -53,4 +53,33 @@ export const signin = async (req, res, next) => {
         next(error);
     }
 
-}
+};
+
+export const google = async (req, res, next) => {  //export google
+    try { //inside the try we check the user present or not, if exist then sign in otherwise we need to create the user
+     
+        const user = await User.findOne({ email: req.body.email }) //the email is coming from request.userbody.email
+      if (user) {
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET); //id of the user getting from the user
+        const { password: pass, ...rest } = user._doc; //separate password and the rest inside user doc
+        res
+          .cookie('access_token', token, { httpOnly: true }) //save the cookie name as access token,,make it more secure using httponly
+          .status(200)
+          .json(rest); //send back the user data
+  
+      } else {
+        const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8); //generate a password
+        const hashedPassword = bcryptjs.hashSync(generatedPassword, 10); //hashed the password
+        const newUser = new User({ username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4) , email: req.body.email, password: hashedPassword, profile: req.body.photo });
+        // for image using the profile and add this in user model.js
+        await newUser.save(); //save this new user
+        
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+        const { password: pass, ...rest } = newUser._doc;
+        res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
+  
+      }
+    } catch (error) {
+      next(error)
+    }
+  }

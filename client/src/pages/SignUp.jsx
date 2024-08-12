@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {Link , useNavigate} from 'react-router-dom'; //the usenavigate navigate one page to another page
+import OAuth from '../components/OAuth';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});  //this will keep track from all the changes
@@ -78,6 +79,9 @@ export default function SignUp() {
         {loading ? 'Loading...' : 'Sign up'}
         {/* if loading is true the say loading... otherwise sing up */}
         </button>
+        {/* adding oauth conponent */}
+        <OAuth />
+
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Have an account?</p>
