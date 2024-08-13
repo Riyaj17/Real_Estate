@@ -70,10 +70,10 @@ export const google = async (req, res, next) => {  //export google
       } else {
         const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8); //generate a password
         const hashedPassword = bcryptjs.hashSync(generatedPassword, 10); //hashed the password
-        const newUser = new User({ username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4) , email: req.body.email, password: hashedPassword, profile: req.body.photo });
+        const newUser = new User({ username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4) , email: req.body.email, password: hashedPassword, avatar: req.body.photo });
         // for image using the profile and add this in user model.js
         await newUser.save(); //save this new user
-        
+
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
         const { password: pass, ...rest } = newUser._doc;
         res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
