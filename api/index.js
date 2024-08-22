@@ -3,6 +3,7 @@ import mongoose from 'mongoose'; //after install mongoose then import it
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js'; // export default router but here the name is userRouter but here use the same address , that's why no problem occurs
 import authRouter from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() =>{
@@ -17,6 +18,7 @@ const app = express();
 
 app.use(express.json());  //this is allow json as the input of the server
 
+app.use(cookieParser());  //get the information from the cookie
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000!');
