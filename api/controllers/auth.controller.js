@@ -58,7 +58,7 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {  //export google
     try { //inside the try we check the user present or not, if exist then sign in otherwise we need to create the user
      
-        const user = await User.findOne({ email: req.body.email }) //the email is coming from request.userbody.email
+        const user = await User.findOne({ email: req.body.email }); //the email is coming from request.userbody.email
       if (user) {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET); //id of the user getting from the user
         const { password: pass, ...rest } = user._doc; //separate password and the rest inside user doc
@@ -82,4 +82,14 @@ export const google = async (req, res, next) => {  //export google
     } catch (error) {
       next(error)
     }
-  }
+  };
+
+
+  export const signOut = async (req, res, next) => {
+    try {
+      res.clearCookie('access_token');
+      res.status(200).json('User has been logged out!');
+    } catch (error) {
+      next(error);
+    }
+  };
