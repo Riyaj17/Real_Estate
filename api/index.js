@@ -3,6 +3,7 @@ import mongoose from 'mongoose'; //after install mongoose then import it
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js'; // export default router but here the name is userRouter but here use the same address , that's why no problem occurs
 import authRouter from './routes/auth.route.js';
+import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/user", userRouter); // userRouter has a default export address , a
 
 app.use('/api/auth', authRouter); //this is for the authentication purpose
 
+app.use('/api/listing', listingRouter); //the routing is for the listing page 
 
 // creating middleware
 app.use((err , req, res, next) => {
