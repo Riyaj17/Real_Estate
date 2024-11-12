@@ -5,6 +5,7 @@ import userRouter from './routes/user.route.js'; // export default router but he
 import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() =>{
@@ -13,6 +14,7 @@ mongoose.connect(process.env.MONGO).then(() =>{
 .catch((err) => {
     console.log(err);
 });
+const __dirname = path.resolve(); //this method help to run this application any system
 
 //using express we create a application
 const app = express();
@@ -31,6 +33,13 @@ app.use("/api/user", userRouter); // userRouter has a default export address , a
 app.use('/api/auth', authRouter); //this is for the authentication purpose
 
 app.use('/api/listing', listingRouter); //the routing is for the listing page 
+
+//access path for run this application
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
 
 // creating middleware
 app.use((err , req, res, next) => {
